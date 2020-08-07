@@ -9,22 +9,21 @@
 </head>
 
 <body>
-  <div id="chart"></div>
   <div id="error"></div>
 </body>
 <script>
 
-  new vega.View(vega.parse(
+ const view =  new vega.View(vega.parse(
     {
       width: 500,
       height: 300,
       background: "#aaa",
       data: [
         {
-          name: "SANKEY_NODES",
+          name: "NODES",
           values: [
             {
-              key: "Chifdsafdsana",
+              key: "Chifdsfdsana",
               depth: 0,
               weight: 500,
               y0: 3000,
@@ -88,7 +87,7 @@
           marks: [
             {
               type: "rect",
-              from: { data: "SANKEY_NODES" },
+              from: { data: "NODES" },
               encode: {
                 enter: {
                   width: { scale: "index", band: 1 },
@@ -101,15 +100,18 @@
             },
             {
               type: "text",
-              from: { data: "SANKEY_NODES" },
-              interactive: false,
+              from: { data: "NODES" },
+              interactive: true,
               encode: {
                 enter: {
-                  fontSize: { value: 20 },
                   align: { value: "center" },
                   baseline: { value: "bottom" }
                 },
+                hover:{
+                  fontSize: { value: 30 },
+                },
                 update: {
+                  fontSize: { value: 20 },
                   text: [{ signal: "datum['key']" }],
                   x: { scale: "index", field: "depth", band: 0.5 },
                   y: { scale: "value", field: "yc" },
@@ -119,7 +121,7 @@
               transform: [
                 {
                   type: "label",
-                  offset: [2],
+                  offset: [20],
                   size: [{ signal: "width" }, { signal: "height" }],
                   avoidHidden: false,
                   avoidBaseMark: false,
@@ -135,7 +137,7 @@
         {
           name: "index",
           type: "band",
-          domain: { data: "SANKEY_NODES", field: "depth" },
+          domain: { data: "NODES", field: "depth" },
           range: "width",
           paddingInner: 0.2
         },
@@ -144,7 +146,7 @@
           type: "linear",
           nice: true,
           zero: true,
-          domain: { data: "SANKEY_NODES", field: "y1" },
+          domain: { data: "NODES", field: "y1" },
           range: "height"
         }
       ]
@@ -153,151 +155,10 @@
 
   ), {
     renderer: "canvas", // renderer (canvas or svg)
-    container: "#chart" // parent DOM container
+    container: "#error", // parent DOM container
+    hover:     true
   })
-
-  new vega.View(vega.parse(
-    {
-      width: 500,
-      height: 300,
-      background: "#aaa",
-      data: [
-        {
-          name: "SANKEY_NODES",
-          values: [
-            {
-              key: "Chifdsafdsana",
-              depth: 0,
-              weight: 500,
-              y0: 3000,
-              y1: 3500,
-              yc: 3250
-            },
-            {
-              key: "Japan",
-              depth: 1,
-              weight: 1000,
-              y0: 0,
-              y1: 1000,
-              yc: 500
-            },
-            {
-              key: "England",
-              depth: 0,
-              weight: 400,
-              y0: 0,
-              y1: 400,
-              yc: 200
-            },
-            {
-              key: "USA",
-              depth: 2,
-              weight: 600,
-              y0: 0,
-              y1: 600,
-              yc: 300
-            },
-            {
-              key: "France",
-              depth: 3,
-              weight: 600,
-              y0: 0,
-              y1: 600,
-              yc: 300
-            },
-            {
-              key: "Morocco",
-              depth: 2,
-              weight: 700,
-              y0: 3200,
-              y1: 3900,
-              yc: 3550
-            }
-          ]
-        }
-      ],
-      marks: [
-        {
-          type: "group",
-          encode: {
-            update: {
-              x: { value: 0 },
-              y: { value: 0 },
-              width: { signal: "width" },
-              height: { signal: "height" }
-            }
-          },
-          marks: [
-            {
-              type: "rect",
-              from: { data: "SANKEY_NODES" },
-              encode: {
-                enter: {
-                  width: { scale: "index", band: 1 },
-                  x: { scale: "index", field: "depth" },
-                  y: { scale: "value", field: "y0" },
-                  y2: { scale: "value", field: "y1" }
-                },
-                update: { fill: { signal: "'black'" } }
-              }
-            },
-            {
-              type: "text",
-              from: { data: "SANKEY_NODES" },
-              interactive: false,
-              encode: {
-                enter: {
-                  fontSize: { value: 20 },
-                  align: { value: "center" },
-                  baseline: { value: "bottom" }
-                },
-                update: {
-                  text: [{ signal: "datum['key']" }],
-                  x: { scale: "index", field: "depth", band: 0.5 },
-                  y: { scale: "value", field: "yc" },
-                  fill: { signal: "'white'" }
-                }
-              },
-              transform: [
-                {
-                  type: "label",
-                  offset: [2],
-                  size: [{ signal: "width" }, { signal: "height" }],
-                  avoidHidden: false,
-                  avoidBaseMark: false,
-                  anchor: ["middle", "right", "left"],
-                  padding: 0
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      scales: [
-        {
-          name: "index",
-          type: "band",
-          domain: { data: "SANKEY_NODES", field: "depth" },
-          range: "width",
-          paddingInner: 0.2
-        },
-        {
-          name: "value",
-          type: "linear",
-          nice: true,
-          zero: true,
-          domain: { data: "SANKEY_NODES", field: "y1" },
-          range: "height"
-        }
-      ]
-    }
-
-
-  ), {
-    renderer: "canvas", // renderer (canvas or svg)
-    container: "#error" // parent DOM container
-  })
-
+  view.runAsync()
 </script>
 
 </html>
